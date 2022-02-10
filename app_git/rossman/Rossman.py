@@ -19,8 +19,8 @@ class Rossman (object):
         
         ## 1.1 Rename columns
         cols_old = ['Store', 'DayOfWeek', 'Date', 'Open', 'Promo', 'StateHoliday', 'SchoolHoliday',
-                    'StoreType', 'Assortment', 'CompetitionDistance', 'CompetitionOpenSinceMonth',
-                    'CompetitionOpenSinceYear', 'Promo2', 'Promo2SinceWeek','Promo2SinceYear', 'PromoInterval']
+                    'StoreType', 'Assortment', 'CompetitionDistance', 'CompetitionOpenSinceMonth', 'CompetitionOpenSinceYear',
+                    'Promo2', 'Promo2SinceWeek','Promo2SinceYear', 'PromoInterval']
 
         snakecase = lambda x: inflection.underscore(x)
         cols_new = list(map(snakecase, cols_old))
@@ -32,9 +32,13 @@ class Rossman (object):
         df1['date'] = pd.to_datetime(df1['date'])
 
         ## 1.5. Fillout NA
+        #competition_distance
+        # Assumimos uma assumption, onde farmacias que não contem competidor proximo, ao inves de retornar um valor NaN, retornar uma distancia maior que o valor max
         df1['competition_distance'] = df1['competition_distance'].apply(lambda x: 200000.0 if math.isnan(x) else x)
 
         #competition_open_since_month
+        # Se o valor == NaN, quer dizer que ou a loja nao tem competidores ou não tem uma data de registro de abertura da competição
+        # Assumption: será inserido o mês e o ano da data de registro da venda, pois na avaliação do algoritmo, esse atributo pode ser importantes para responder a alta ou baixa no valor de venda, nesse sentido, vamos assumir essa premissa para analisar os resultados
         df1['competition_open_since_month'] = df1.apply(lambda x: x['date'].month if math.isnan(x['competition_open_since_month']) else x['competition_open_since_month'], axis=1)
 
         #competition_open_since_year
@@ -59,8 +63,8 @@ class Rossman (object):
         df1['competition_open_since_year'] = df1['competition_open_since_year'].astype(int)
 
         # promo2
-        df1['promo_since_week'] = df1['promo_since_week'].astype(int)        
-        df1['promo_since_year'] = df1['promo_since_year'].astype(int) 
+        df1['promo2_since_week'] = df1['promo2_since_week'].astype(int)        
+        df1['promo2_since_year'] = df1['promo2_since_year'].astype(int) 
         
         return df1
     
@@ -68,25 +72,21 @@ class Rossman (object):
 
         #year
         df2['year'] = df2['date'].dt.year
-
         #month
         df2['month'] = df2['date'].dt.month
-
         #day
         df2['day'] = df2['date'].dt.day
-
         #week of year
         df2['week_of_year'] = df2['date'].dt.weekofyear
-
         #year week
-        df2['week_of_year'] = df2['date'].dt.strftime('%Y-%W')
+        #df2['week_of_year'] = df2['date'].dt.strftime('%Y-%W')
 
         #competition since
         df2['competition_since'] = df2.apply(lambda x: datetime.datetime(year= x['competition_open_since_year'], month= x['competition_open_since_month'], day=1), axis=1)
         df2['competition_time_month'] = ((df2['date'] - df2['competition_since'])/30).apply(lambda x: x.days).astype('int64')
         #promo since
         df2['promo_since'] = df2['promo2_since_year'].astype(str) + '-' + df2['promo2_since_week'].astype(str)
-        df2['promo_since'] = df2['promo_since'].apply(lambda x: datetime.datetime.strptime(x + '-1', '%Y-%W-%w') - timedelta(days=7))
+        df2['promo_since'] = df2['promo_since'].apply(lambda x: datetime.datetime.strptime(x + '-1', '%Y-%W-%w') - datetime.timedelta(days=7))#============
         df2['promo_time_week'] = ((df2['date'] - df2['promo_since'])/7).apply(lambda x: x.days).astype('int64')
 
         #assortments
@@ -153,15 +153,15 @@ class Rossman (object):
                          'promo2_since_week', 'promo2_since_year', 'competition_time_month', 'promo_time_week',
                          'month_cos', 'month_sin', 'day_sin', 'day_cos', 'day_of_week_sin', 'day_of_week_cos',
                          'week_of_year_sin', 'week_of_year_cos']
-
+        
         return df5[cols_selected]
     
-    def get_prediction( self, model, original_data, test_data ):
+    def get_prediction(self, model, original_data, test_data):
         # prediction
-        pred = model.predict( test_data )
+        pred = model.predict(test_data)
         
-        # join pred into the original data
-        original_data['prediction'] = np.expm1( pred )
+        # join pred into original data
+        original_data['predition'] = np.expm1(pred)
         
-        return original_data.to_json( orient='records', date_format='iso' )
+        return original_data.to_json(orient='records', date_format='iso')
 
