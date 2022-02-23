@@ -53,7 +53,7 @@ Acesso ao bot do modelo no Telegram:
 7. **Métricas do modelo e métricas de negócio:** desempenho do modelo para o resultado de negócios;
 8. **Deploy:** deploy do modelo em nuvem e criação do bot no Telegram para consulta da previsão.
 
-# 5. Top Insights
+# 4.1. Top Insights
 
 1. **H2. Lojas com competidores mais próximos deveriam vender menos.** Falsa, a relação de venda com a distância de competidores não se correlacionam.
 
@@ -61,7 +61,7 @@ Acesso ao bot do modelo no Telegram:
 
 3. **H11. Lojas que abrem nos finais de semana deveriam vender menos.** Verdadeiro, o volume reduz durante a semana, significativamente durante os finais de semana, em relação aos outros dias.
 
-# 6. Modelos de Machine Learning e Performance
+# 5. Modelos de Machine Learning e Performance
 
 Modelos utilizados para teste:
 - Average Model
@@ -69,6 +69,15 @@ Modelos utilizados para teste:
 - Linear Regression Regularized Model - Lasso
 - Random Forest Regressor
 - XGBoost Regressor
+
+**Performance**
+
+| Model Name | MAE | MAPE  | RMSE |
+|-----------|---------|-----------|---------|
+|  Linear Regression  | 1864.29 |	0.29	| 2660.29 |
+|  Linear Regression Lasso	| 1862.75 |	0.29 | 2680.59 |
+|  Random Forest Regressor	  | 674.85 |	0.10 |	1006.19 |
+|  XGBoost Regressor | 6683.34 |	0.95 |	7330.61 |
 
 **Performance Cross Validation**
 
@@ -78,4 +87,12 @@ Modelos utilizados para teste:
 |  Linear Regression	  | 2075.55 +/- 294.74 | 0.3 +/- 0.01   | 2949.35 +/- 463.59 |
 |  Linear Regression - Lasso	  | 2116.72 +/- 341.48 | 0.29 +/- 0.01	   | 3057.96 +/- 504.86 |
 |  XGBoost Regressor	  | 7049.09 +/- 588.66 | 0.95 +/- 0.00   | 7715.15 +/- 689.64 |
+
+No processo de aplicação de algoritmos, os modelos lineares não tiveram bons resultados. A Random Forest Regressor teve um resultado superior aos outros, mas antes de selecionar o modelo ideal, temos alguns pontos para avaliar.
+
+Fatores como recurso computacional, tempo e espaço de armazenamento, influênciaram na seleção do modelo. Neste sentido, o algoritmo selecionado foi o XGBoost Regressor, por ser um modelo mais performático que a RFR. E Para uma primeira entrega (MVP) a RFR não faria muito sentido, neste momento.
+
+# 6. Hyperparameter Fine Tunning
+
+Após a seleção do modelo, foi submetido ao procedimento de Fine Tunning, através do método Random Search, os melhores parâmetros foram selecionados e o modelo foi treinado e testado novamente. Apresentando os seguintes resultados:
 
