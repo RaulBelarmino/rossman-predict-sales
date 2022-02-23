@@ -52,3 +52,30 @@ Acesso ao bot do modelo no Telegram:
 6. **Hyperparameter Fine Tunning:** escolha dos melhores valores para cada um dos parâmetros do modelo;
 7. **Métricas do modelo e métricas de negócio:** desempenho do modelo para o resultado de negócios;
 8. **Deploy:** deploy do modelo em nuvem e criação do bot no Telegram para consulta da previsão.
+
+# 5. Top Insights
+
+1. **H2. Lojas com competidores mais próximos deveriam vender menos.** Falsa, a relação de venda com a distância de competidores não se correlacionam.
+
+2. **H7. Em média, as vendas no natal deveriam ser maiores.** Verdadeira, o volume de vendas em comparação aos outros dias é maior, na média.
+
+3. **H11. Lojas que abrem nos finais de semana deveriam vender menos.** Verdadeiro, o volume reduz durante a semana, significativamente durante os finais de semana, em relação aos outros dias.
+
+# 6. Modelos de Machine Learning e Performance
+
+Modelos utilizados para teste:
+- Average Model
+- Linear Regression Model
+- Linear Regression Regularized Model - Lasso
+- Random Forest Regressor
+- XGBoost Regressor
+
+**Performance Cross Validation**
+
+| Model Name | MAE CV   | MAPE CV      | RMSE CV |
+|-----------|---------|-----------|---------|
+|  Random Forest Regressor  | 838.79 +/- 221.98| 0.12 +/- 0.02  | 1257.26 +/- 323.91 |
+|  Linear Regression	  | 2075.55 +/- 294.74 | 0.3 +/- 0.01   | 2949.35 +/- 463.59 |
+|  Linear Regression - Lasso	  | 2116.72 +/- 341.48 | 0.29 +/- 0.01	   | 3057.96 +/- 504.86 |
+|  XGBoost Regressor	  | 7049.09 +/- 588.66 | 0.95 +/- 0.00   | 7715.15 +/- 689.64 |
+
