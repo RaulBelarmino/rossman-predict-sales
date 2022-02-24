@@ -96,3 +96,56 @@ Fatores como recurso computacional, tempo e espaço de armazenamento, influênci
 
 Após a seleção do modelo, foi submetido ao procedimento de Fine Tunning, através do método Random Search, os melhores parâmetros foram selecionados e o modelo foi treinado e testado novamente. Apresentando os seguintes resultados:
 
+| Model Name| MAE CV  | MAPE CV   | RMSE CV |
+|-----------|---------|-----------|---------|
+|XGBoost Regressor |	875.97+/-147.62 |	0.12+/-0.02 |	1248.59+/-207.69|
+
+# 7. Métricas do modelo e métricas de negócio
+
+Para verificar a performance do modelo, é necessário comparar com o atual modelo utilizado pela empresa (Average Model) com modelo proposto (XGBoost Regressor):
+
+**Average Model**
+| Cenário | Predições | 
+|-----------|---------|
+| Total Predictions| R$280,754,389.45|
+
+**XGBoost**
+| Cenário | Predições | 
+|-----------|---------|
+| predições |	R$282,954,840.45 |
+| melhor cenário |	R$255,429,264.00 |
+| pior cenário |	R$310,480,416.91 |
+
+## 7.1. Comparativo entre modelos
+
+Desempenho entre modelos:
+
+| Model Name| MAE | MAPE | RMSE |
+|-----------|---------|-----------|---------|
+| Average Model	|	1354.80 |	0.46 |	1835.14|
+|XGBoost Regressor Tuned| 664.93 | 0.10 | 964.50|
+
+Comparativo entre cenários:
+
+| Cenário | Predições | 
+|-----------|---------|
+| melhor cenário | - R$25.325.125,45 |
+| pior cenário | + R$29.726.027,46 |
+
+Obs: predições do XGB - predições Avarege Model
+
+# 8. Conclusão
+
+Sobre o modelo XGBoost apresentou resultados consideráveis para um primeiro ciclo do método CRISP, principalmente ao aprendizado do comportamento e oscilações de cada loja, ponto que o modelo de média não realiza. As predições do modelo em sua maioria subestimam as predições, e de 1.115 lojas, 1% das lojas tem o erro média absoluto acima de 20%, sendo a média de 10% (MAPE) com desvio padrão de 3%. 
+
+Por mais que o modelo de média seja um modelo simples e que apresentou valores de predições parecidos com o XGBoost, o MAPE é de 46%. Nesse sentido, como o problema de negócio é uma predição de valores por loja nas próximas seis semanas. Faz sentido a utilização do modelo proposto como solução.
+
+# 9. Proximos passos
+
+Para um segundo ciclo, notou-se alguns pontos para melhoria do modelo:
+
+- Desenvolver um modelo para predição de colaboradores na loja (customers), para trabalhar em conjunto com o modelo de predição de vendas;
+- Tentar abordagens diferentes com dados Nulos;
+- Testar outros enconders ou rescaling de dados;
+- Tunar os parâmetros do modelo com outra metodologia;
+- Criar novos outputs para o bot no Telegram.
